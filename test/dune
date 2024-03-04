@@ -1,0 +1,3 @@
+(tests
+ (names option_test non_empty_list_test)
+ (libraries tabr alcotest))
