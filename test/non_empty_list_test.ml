@@ -41,10 +41,12 @@ let test_non_empty_list_map () =
       Alcotest.(check @@ list int) "same values" rest [ 4; 9 ]
 
 let test_non_empty_list_filter () =
-  let result : int list =
-    Non_empty_list.filter (fun v -> v != 2) (1, [ 2; 3 ])
-  in
-  Alcotest.(check @@ list int) "same values" [ 1; 3 ] result
+  let result = Non_empty_list.filter (fun v -> v != 2) (1, [ 2; 3 ]) in
+  match result with
+  | Some (num, rest) ->
+      Alcotest.(check @@ int) "same values" num 1;
+      Alcotest.(check @@ list int) "same values" rest [ 3 ]
+  | _ -> Alcotest.fail "Bad values"
 
 let test_non_empty_list_exists () =
   let result = Non_empty_list.exists (fun v -> v == 2) (1, [ 2; 3 ]) in

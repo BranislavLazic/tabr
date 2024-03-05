@@ -8,7 +8,8 @@ let from_list list =
 let map fn nel = match nel with a, rest -> (fn a, List.map fn rest)
 
 let filter fn nel =
-  match nel with a, rest -> (if fn a then [ a ] else []) @ List.filter fn rest
+  match nel with
+  | a, rest -> from_list ((if fn a then [ a ] else []) @ List.filter fn rest)
 
 let exists fn nel = match nel with a, rest -> fn a || List.exists fn rest
 let for_all fn nel = match nel with a, rest -> fn a && List.for_all fn rest
