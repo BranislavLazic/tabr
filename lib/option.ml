@@ -18,5 +18,5 @@ let tap fn = function
 let tap_none fn = function
   | Some v -> v
   | _ ->
-      fn;
+      fn ();
       None

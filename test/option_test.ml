@@ -57,7 +57,9 @@ let test_tap () =
   Alcotest.(check @@ option string) "same values" (Some "Hello") result
 
 let test_tap_none () =
-  let result = Tabr.Option.tap (fun _ -> print_endline "It's none") None in
+  let result =
+    Tabr.Option.tap_none (fun () -> print_endline "It's none") None
+  in
   Alcotest.(check @@ option string) "same values" None result
 
 let () =
