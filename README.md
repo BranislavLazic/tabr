@@ -1,4 +1,4 @@
-# Tabr
+# Tabr [![Build & Test](https://github.com/BranislavLazic/tabr/actions/workflows/actions.yml/badge.svg)](https://github.com/BranislavLazic/tabr/actions/workflows/actions.yml)
 
 Functional utilities
 
