@@ -41,6 +41,26 @@ let test_left_map () =
   | Left v -> Alcotest.(check @@ int) "same values" 10 v
   | _ -> Alcotest.fail "Bad values"
 
+let test_bimap_right () =
+  let result = Ior.right 5 |> Ior.bimap (fun l -> l * 2) (fun r -> r * 3) in
+  match result with
+  | Right a -> Alcotest.(check @@ int) "same values" 15 a
+  | _ -> Alcotest.fail "Bad values"
+
+let test_bimap_left () =
+  let result = Ior.left 5 |> Ior.bimap (fun l -> l * 2) (fun r -> r * 3) in
+  match result with
+  | Left a -> Alcotest.(check @@ int) "same values" 10 a
+  | _ -> Alcotest.fail "Bad values"
+
+let test_bimap_both () =
+  let result = Ior.both 4 5 |> Ior.bimap (fun l -> l * 2) (fun r -> r * 3) in
+  match result with
+  | Both (l, r) ->
+      Alcotest.(check @@ int) "same values" 8 l;
+      Alcotest.(check @@ int) "same values" 15 r
+  | _ -> Alcotest.fail "Bad values"
+
 let test_swap_right_to_left () =
   let result = Ior.right "Hello" |> Ior.swap in
   match result with
@@ -165,6 +185,12 @@ let () =
       ("right", [ test_case "should return Ior as Right" `Quick test_right ]);
       ("left", [ test_case "should return Ior as Left" `Quick test_left ]);
       ("both", [ test_case "should return Ior as Both" `Quick test_both ]);
+      ( "bimap",
+        [
+          test_case "should bimap a value on Right" `Quick test_bimap_right;
+          test_case "should bimap a value on Left" `Quick test_bimap_left;
+          test_case "should bimap a value on Both" `Quick test_bimap_both;
+        ] );
       ( "map",
         [
           test_case "should map a value on Right" `Quick test_map_on_right;
