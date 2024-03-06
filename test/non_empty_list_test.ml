@@ -3,20 +3,18 @@ open Tabr
 open Tabr.Non_empty_list
 
 let test_non_empty_list () =
-  let result : int Non_empty_list.non_empty_list = (1, [ 2; 3 ]) in
+  let result = (1, [ 2; 3 ]) in
   match result with
   | head, rest ->
       Alcotest.(check @@ int) "same values" head 1;
       Alcotest.(check @@ list int) "same values" rest [ 2; 3 ]
 
 let test_non_empty_list_single_element () =
-  let result : int Non_empty_list.non_empty_list = Non_empty_list.one 99 in
+  let result = Non_empty_list.one 99 in
   match result with head, _ -> Alcotest.(check @@ int) "same values" head 99
 
 let test_non_empty_list_from_list_present () =
-  let result : int Non_empty_list.non_empty_list option =
-    Tabr.Non_empty_list.from_list [ 1; 2; 3 ]
-  in
+  let result = Non_empty_list.from_list [ 1; 2; 3 ] in
   match result with
   | Some (head, rest) ->
       Alcotest.(check @@ int) "same values" head 1;
@@ -24,17 +22,13 @@ let test_non_empty_list_from_list_present () =
   | None -> Alcotest.fail "Bad values"
 
 let test_non_empty_list_from_list_absent () =
-  let result : int Non_empty_list.non_empty_list option =
-    Tabr.Non_empty_list.from_list []
-  in
+  let result = Non_empty_list.from_list [] in
   match result with
   | None -> Alcotest.(check pass) "Absent value" () ()
   | _ -> Alcotest.fail "Bad values"
 
 let test_non_empty_list_map () =
-  let result : int Non_empty_list.non_empty_list =
-    (1, [ 2; 3 ]) |> Non_empty_list.map (fun v -> v * v)
-  in
+  let result = (1, [ 2; 3 ]) |> Non_empty_list.map (fun v -> v * v) in
   match result with
   | head, rest ->
       Alcotest.(check @@ int) "same values" head 1;
@@ -82,20 +76,40 @@ let test_non_empty_list_concat () =
       Alcotest.(check @@ list int) "same values" rest [ 2; 3; 4; 5; 6 ]
 
 let test_non_empty_list_append () =
-  let nel : int Non_empty_list.non_empty_list = (1, [ 2; 3 ]) in
-  let result : int Non_empty_list.non_empty_list = nel <+ 4 in
+  let nel = (1, [ 2; 3 ]) in
+  let result = nel <+ 4 in
   match result with
   | head, rest ->
       Alcotest.(check @@ int) "same values" head 1;
       Alcotest.(check @@ list int) "same values" rest [ 2; 3; 4 ]
 
 let test_non_empty_list_prepend () =
-  let nel : int Non_empty_list.non_empty_list = (1, [ 2; 3 ]) in
-  let result : int Non_empty_list.non_empty_list = 4 +> nel in
+  let nel : int Non_empty_list.t = (1, [ 2; 3 ]) in
+  let result : int Non_empty_list.t = 4 +> nel in
   match result with
   | head, rest ->
       Alcotest.(check @@ int) "same values" head 4;
       Alcotest.(check @@ list int) "same values" rest [ 1; 2; 3 ]
+
+let test_non_empty_list_size () =
+  let size = (1, [ 2; 3 ]) |> Non_empty_list.size in
+  Alcotest.(check @@ int) "same values" size 3
+
+let test_non_empty_list_to_list () =
+  let list = (1, [ 2; 3 ]) |> Non_empty_list.to_list in
+  Alcotest.(check @@ list int) "same values" list [ 1; 2; 3 ]
+
+let test_non_empty_list_to_option () =
+  let option = (1, [ 2; 3 ]) |> Non_empty_list.to_option in
+  Alcotest.(check @@ option (pair int (list int)))
+    "same values" option
+    (Some (1, [ 2; 3 ]))
+
+let test_non_empty_list_result () =
+  let result = (1, [ 2; 3 ]) |> Non_empty_list.to_result in
+  Alcotest.(check @@ result (pair int (list int)) string)
+    "same values" result
+    (Ok (1, [ 2; 3 ]))
 
 let () =
   run "Non empty list"
@@ -160,5 +174,25 @@ let () =
         [
           test_case "should prepend a value to a non-empty list" `Quick
             test_non_empty_list_prepend;
+        ] );
+      ( "size",
+        [
+          test_case "should return the size of a non-empty list" `Quick
+            test_non_empty_list_size;
+        ] );
+      ( "to_list",
+        [
+          test_case "should return a list from a non-empty list" `Quick
+            test_non_empty_list_to_list;
+        ] );
+      ( "to_option",
+        [
+          test_case "should return an option from a non-empty list" `Quick
+            test_non_empty_list_to_option;
+        ] );
+      ( "to_result",
+        [
+          test_case "should return a result from a non-empty list" `Quick
+            test_non_empty_list_result;
         ] );
     ]

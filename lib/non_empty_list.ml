@@ -1,4 +1,4 @@
-type 'a non_empty_list = 'a * 'a list
+type 'a t = 'a * 'a list
 
 let one a = (a, [])
 
@@ -32,3 +32,7 @@ let ( <+> ) l_nel r_nel =
 
 let ( <+ ) nel value = match nel with head, rest -> (head, rest @ [ value ])
 let ( +> ) value nel = match nel with head, rest -> (value, [ head ] @ rest)
+let size nel = match nel with _, rest -> List.length rest + 1
+let to_list nel = match nel with head, rest -> head :: rest
+let to_option nel = match nel with head, rest -> Some (head, rest)
+let to_result nel = match nel with head, rest -> Ok (head, rest)
