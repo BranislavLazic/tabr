@@ -17,7 +17,12 @@
  (name tabr)
  (allow_empty)
  (description "Functional utilities")
- (depends ocaml dune (ocamlformat (>= 0.26.0)) (alcotest (>= 1.7.0)))
+ (depends
+  ocaml
+  dune
+  (ocamlformat
+   (>= 0.26.0))
+  (alcotest
+   (>= 1.7.0)))
  (tags
   (topics "Functional utilities" "Branislav Lazic" "tabr")))
-
