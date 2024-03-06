@@ -42,6 +42,14 @@ let test_non_empty_list_filter () =
       Alcotest.(check @@ list int) "same values" rest [ 3 ]
   | _ -> Alcotest.fail "Bad values"
 
+let test_non_empty_list_find () =
+  let result = Non_empty_list.find (fun v -> v == 2) (1, [ 2; 3 ]) in
+  Alcotest.(check @@ option int) "same values" (Some 2) result
+
+let test_non_empty_list_find_not_found () =
+  let result = Non_empty_list.find (fun v -> v == 4) (1, [ 2; 3 ]) in
+  Alcotest.(check @@ option int) "same values" None result
+
 let test_non_empty_list_exists () =
   let result = Non_empty_list.exists (fun v -> v == 2) (1, [ 2; 3 ]) in
   Alcotest.(check @@ bool) "same values" true result
@@ -53,6 +61,15 @@ let test_non_empty_list_exists_not_satisfied () =
 let test_non_empty_list_for_all () =
   let result = Non_empty_list.for_all (fun v -> v == 2) (2, [ 2; 2 ]) in
   Alcotest.(check @@ bool) "same values" true result
+
+let test_non_empty_list_zip () =
+  let result = Non_empty_list.zip (1, [ 2; 3 ]) (4, [ 5; 6 ]) in
+  match result with
+  | head, rest ->
+      Alcotest.(check @@ pair int int) "same values" head (1, 4);
+      Alcotest.(check @@ list (pair int int))
+        "same values" rest
+        [ (2, 5); (3, 6) ]
 
 let test_non_empty_list_reverse () =
   let nel = (1, [ 2; 3 ]) in
@@ -137,6 +154,12 @@ let () =
       ( "filter",
         [ test_case "should filter values" `Quick test_non_empty_list_filter ]
       );
+      ( "find",
+        [
+          test_case "should find a value" `Quick test_non_empty_list_find;
+          test_case "should not find a value" `Quick
+            test_non_empty_list_find_not_found;
+        ] );
       ( "exists",
         [
           test_case
@@ -154,6 +177,11 @@ let () =
           test_case
             "should return false if all values do not satisfy a condition"
             `Quick test_non_empty_list_for_all_not_satisfied;
+        ] );
+      ( "zip",
+        [
+          test_case "should zip two non-empty lists" `Quick
+            test_non_empty_list_zip;
         ] );
       ( "reverse",
         [
