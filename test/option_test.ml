@@ -106,8 +106,10 @@ let () =
             `Quick test_contains_does_not_contain;
         ] );
       ( "tap",
+        [ test_case "should not change the value when present" `Quick test_tap ]
+      );
+      ( "tap_none",
         [
-          test_case "should not change the value when present" `Quick test_tap;
           test_case "should not change the value when absent" `Quick
             test_tap_none;
         ] );

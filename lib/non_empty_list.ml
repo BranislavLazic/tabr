@@ -5,17 +5,30 @@ let one a = (a, [])
 let from_list list =
   match list with head :: tail -> Some (head, tail) | [] -> None
 
-let map fn nel = match nel with a, rest -> (fn a, List.map fn rest)
+let map fn nel = match nel with head, rest -> (fn head, List.map fn rest)
 
 let filter fn nel =
   match nel with
-  | a, rest -> from_list ((if fn a then [ a ] else []) @ List.filter fn rest)
+  | head, rest ->
+      from_list ((if fn head then [ head ] else []) @ List.filter fn rest)
 
-let exists fn nel = match nel with a, rest -> fn a || List.exists fn rest
-let for_all fn nel = match nel with a, rest -> fn a && List.for_all fn rest
+let exists fn nel =
+  match nel with head, rest -> fn head || List.exists fn rest
+
+let for_all fn nel =
+  match nel with head, rest -> fn head && List.for_all fn rest
+
+let reverse nel =
+  match nel with
+  | head, rest ->
+      if List.length rest > 0 then
+        let revRest = List.rev rest in
+        (List.hd revRest, List.tl revRest @ [ head ])
+      else (head, [])
 
 let ( <+> ) l_nel r_nel =
   match (l_nel, r_nel) with
   | (l, rest_l), (r, rest_r) -> (l, rest_l @ [ r ] @ rest_r)
 
-let concat l_nel r_nel = l_nel <+> r_nel
+let ( <+ ) nel value = match nel with head, rest -> (head, rest @ [ value ])
+let ( +> ) value nel = match nel with head, rest -> (value, [ head ] @ rest)
