@@ -1,4 +1,4 @@
-(lang dune 3.6)
+(lang dune 3.14)
 
 (name tabr)
 
@@ -17,6 +17,7 @@
  (name tabr)
  (allow_empty)
  (description "Functional utilities")
+ (synopsis "Functional utilities")
  (depends
   ocaml
   dune

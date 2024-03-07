@@ -2,7 +2,7 @@ let get_or_else value = function Some v -> v | None -> value
 let or_else alternate = function Some v -> Some v | None -> alternate
 let filter fn = function Some v when fn v -> Some v | _ -> None
 let flatten = function Some (Some v) -> Some v | _ -> None
-let contains value = function Some v -> v == value | _ -> false
+let contains value = function Some v -> v = value | _ -> false
 
 let zip l_opt r_opt =
   match (l_opt, r_opt) with
